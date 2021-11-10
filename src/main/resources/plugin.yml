@@ -3,5 +3,5 @@ version: '${project.version}'
 main: net.quadseed.minecraft.quantumvault.QuantumVault
 api-version: 1.17
 authors: [ quadseed ]
-description: Private Vault System Package designed for CITERA Server
+description: Private Vault & Instant Craft System for Spigot/PaperMC Server
 depend: [ ItemContainerAPI ]
