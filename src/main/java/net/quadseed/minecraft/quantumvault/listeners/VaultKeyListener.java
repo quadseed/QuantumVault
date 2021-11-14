@@ -2,11 +2,14 @@ package net.quadseed.minecraft.quantumvault.listeners;
 
 import net.quadseed.minecraft.quantumvault.QuantumVault;
 import net.quadseed.minecraft.quantumvault.items.IntegratedKey;
+import net.quadseed.minecraft.quantumvault.items.QuantumKey;
 import net.quadseed.minecraft.quantumvault.items.VaultKey;
+import net.quadseed.minecraft.quantumvault.menugui.BaseMenu;
+import net.quadseed.minecraft.quantumvault.menugui.MultiPageVault;
+import net.quadseed.minecraft.quantumvault.menugui.SinglePageVault;
 import net.quadseed.minecraft.quantumvault.utils.VaultUtils;
 import net.quadseed.minecraft.itemcontainerapi.ItemContainerManager;
-import org.bukkit.ChatColor;
-import org.bukkit.Sound;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,11 +18,9 @@ import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
 
 public class VaultKeyListener implements Listener {
 
@@ -28,6 +29,18 @@ public class VaultKeyListener implements Listener {
         Player player = event.getPlayer();
         ItemContainerManager container = new ItemContainerManager(QuantumVault.getPlugin(), player);
         container.registerNameSpace("vault");
+        for (int i = 1; i < 5; i++) {
+            container.registerNameSpace(String.valueOf(i));
+        }
+    }
+
+    @EventHandler
+    public void onCraft(CraftItemEvent event) {
+        if (event.getRecipe().getResult().equals(QuantumKey.getItem())) {
+            Bukkit.getScheduler().scheduleSyncDelayedTask(QuantumVault.getPlugin(), () -> {
+                event.getClickedInventory().setItem(5, IntegratedKey.getItem());
+            });
+        }
     }
 
     @EventHandler
@@ -42,8 +55,9 @@ public class VaultKeyListener implements Listener {
 
         boolean isVaultKey = item.equals(VaultKey.getItem());
         boolean isIntegratedKey = item.equals(IntegratedKey.getItem()) && player.isSneaking();
+        boolean isQuantumKey = item.equals(QuantumKey.getItem()) && player.isSneaking();
 
-        if (!isVaultKey && !isIntegratedKey) {
+        if (!isVaultKey && !isIntegratedKey && !isQuantumKey) {
             return;
         }
 
@@ -52,54 +66,33 @@ public class VaultKeyListener implements Listener {
             return;
         }
 
-        if (action == Action.RIGHT_CLICK_BLOCK) {
-            if (!Objects.requireNonNull(event.getClickedBlock()).getType().isInteractable()) {
-                VaultUtils.openVault(player);
-                event.setCancelled(true);
+        if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
+            event.setCancelled(true);
+            if (isQuantumKey) {
+                MultiPageVault vault = new MultiPageVault(VaultUtils.getMenuUtility(player));
+                vault.open();
+            } else {
+                SinglePageVault vault = new SinglePageVault(VaultUtils.getMenuUtility(player));
+                vault.open();
             }
-            return;
-        }
-
-        if (action == Action.RIGHT_CLICK_AIR) {
-            VaultUtils.openVault(player);
         }
     }
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        Player player = (Player) event.getWhoClicked();
-        if (event.getView().getTitle().equalsIgnoreCase(ChatColor.DARK_PURPLE + "プライベート倉庫")) {
-            ItemStack item = event.getCurrentItem();
-
-            if (item == null) {
-                return;
-            }
-
-            boolean isVaultKey = item.equals(VaultKey.getItem());
-            boolean isIntegratedKey = item.equals(IntegratedKey.getItem());
-
-            if (isVaultKey || isIntegratedKey) {
-                event.setCancelled(true);
-                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1, 1);
-                player.sendMessage(ChatColor.RED + "ストレージキーは収納できません");
-            }
+        InventoryHolder holder = event.getInventory().getHolder();
+        if (holder instanceof BaseMenu) {
+            BaseMenu menu = (BaseMenu) holder;
+            menu.InventoryClickHandler(event);
         }
     }
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
-        Player player = (Player) event.getPlayer();
-
-        if (event.getView().getTitle().equalsIgnoreCase(ChatColor.DARK_PURPLE + "プライベート倉庫")) {
-
-            ArrayList<ItemStack> prunedItems = new ArrayList<>();
-
-            Arrays.stream(event.getInventory().getContents())
-                    .filter(Objects::nonNull)
-                    .forEach(prunedItems::add);
-
-            ItemContainerManager container = new ItemContainerManager(QuantumVault.getPlugin(), player);
-            container.storeItems("vault", prunedItems);
+        InventoryHolder holder = event.getInventory().getHolder();
+        if (holder instanceof BaseMenu) {
+            BaseMenu menu = (BaseMenu) holder;
+            menu.InventoryCloseHandler(event);
         }
     }
 }

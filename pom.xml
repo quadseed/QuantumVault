@@ -6,7 +6,7 @@
 
     <groupId>net.clustlight.spigot</groupId>
     <artifactId>QuantumVault</artifactId>
-    <version>0.9.0-Dev</version>
+    <version>1.0.0-Beta-RC7</version>
     <packaging>jar</packaging>
 
     <name>QuantumVault</name>

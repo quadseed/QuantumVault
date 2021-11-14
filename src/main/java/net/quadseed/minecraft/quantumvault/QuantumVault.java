@@ -2,6 +2,7 @@ package net.quadseed.minecraft.quantumvault;
 
 import net.quadseed.minecraft.quantumvault.items.CraftKey;
 import net.quadseed.minecraft.quantumvault.items.IntegratedKey;
+import net.quadseed.minecraft.quantumvault.items.QuantumKey;
 import net.quadseed.minecraft.quantumvault.items.VaultKey;
 import net.quadseed.minecraft.quantumvault.listeners.CraftKeyListener;
 import net.quadseed.minecraft.quantumvault.listeners.VaultKeyListener;
@@ -25,6 +26,7 @@ public final class QuantumVault extends JavaPlugin {
         Bukkit.getServer().addRecipe(CraftKey.getRecipe());
         Bukkit.getServer().addRecipe(VaultKey.getRecipe());
         Bukkit.getServer().addRecipe(IntegratedKey.getRecipe());
+        Bukkit.getServer().addRecipe(QuantumKey.getRecipe());
 
     }
 

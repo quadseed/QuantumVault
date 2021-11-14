@@ -3,4 +3,4 @@
 Private Vault & Instant Craft System for Spigot/PaperMC Server
 
 ### Requirements
-- ItemContainerAPI
+- [ItemContainerAPI](https://github.com/quadseed/ItemContainerAPI)

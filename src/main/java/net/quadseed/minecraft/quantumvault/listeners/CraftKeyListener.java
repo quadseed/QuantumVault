@@ -2,6 +2,7 @@ package net.quadseed.minecraft.quantumvault.listeners;
 
 import net.quadseed.minecraft.quantumvault.items.CraftKey;
 import net.quadseed.minecraft.quantumvault.items.IntegratedKey;
+import net.quadseed.minecraft.quantumvault.items.QuantumKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -26,9 +27,10 @@ public class CraftKeyListener implements Listener {
 
         boolean isCraftKey = item.equals(CraftKey.getItem());
         boolean isIntegratedKey = item.equals(IntegratedKey.getItem()) && !player.isSneaking();
+        boolean isQuantumKey = item.equals(QuantumKey.getItem()) && !player.isSneaking();
 
 
-        if (!isCraftKey && !isIntegratedKey) {
+        if (!isCraftKey && !isIntegratedKey && !isQuantumKey) {
             return;
         }
 

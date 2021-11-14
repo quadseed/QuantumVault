@@ -1,25 +1,24 @@
 package net.quadseed.minecraft.quantumvault.utils;
 
-import net.quadseed.minecraft.quantumvault.QuantumVault;
-import net.quadseed.minecraft.itemcontainerapi.ItemContainerManager;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import net.quadseed.minecraft.quantumvault.menugui.MenuUtility;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class VaultUtils {
 
-    public static void openVault(Player player) {
-        ItemContainerManager container = new ItemContainerManager(QuantumVault.getPlugin(), player);
-        ArrayList<ItemStack> vaultItems = container.getItems("vault");
+    private static final HashMap<Player, MenuUtility> menuUtilityMap = new HashMap<>();
 
-        Inventory vault = Bukkit.createInventory(player, 54, ChatColor.DARK_PURPLE + "プライベート倉庫");
-        vaultItems.forEach(vault::addItem);
+    public static MenuUtility getMenuUtility(Player player) {
+        MenuUtility utility;
 
-        player.openInventory(vault);
+        if (menuUtilityMap.containsKey(player)) {
+            return menuUtilityMap.get(player);
+        } else {
+            utility = new MenuUtility(player);
+            menuUtilityMap.put(player, utility);
+            return utility;
+        }
     }
 
 }
