@@ -10,6 +10,7 @@ import net.quadseed.minecraft.quantumvault.menugui.SinglePageVault;
 import net.quadseed.minecraft.quantumvault.utils.VaultUtils;
 import net.quadseed.minecraft.itemcontainerapi.ItemContainerManager;
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -32,6 +33,9 @@ public class VaultKeyListener implements Listener {
         for (int i = 1; i < 5; i++) {
             container.registerNameSpace(String.valueOf(i));
         }
+        player.discoverRecipe(NamespacedKey.minecraft("vault_key"));
+        player.discoverRecipe(NamespacedKey.minecraft("integrated_key"));
+        player.discoverRecipe(NamespacedKey.minecraft("quantum_key"));
     }
 
     @EventHandler

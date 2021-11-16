@@ -3,17 +3,24 @@ package net.quadseed.minecraft.quantumvault.listeners;
 import net.quadseed.minecraft.quantumvault.items.CraftKey;
 import net.quadseed.minecraft.quantumvault.items.IntegratedKey;
 import net.quadseed.minecraft.quantumvault.items.QuantumKey;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Objects;
 
 public class CraftKeyListener implements Listener {
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event) {
+        event.getPlayer().discoverRecipe(NamespacedKey.minecraft("craft_key"));
+    }
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
