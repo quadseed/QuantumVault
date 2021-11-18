@@ -32,9 +32,9 @@ public class CraftKeyListener implements Listener {
             return;
         }
 
-        boolean isCraftKey = item.equals(CraftKey.getItem());
-        boolean isIntegratedKey = item.equals(IntegratedKey.getItem()) && !player.isSneaking();
-        boolean isQuantumKey = item.equals(QuantumKey.getItem()) && !player.isSneaking();
+        boolean isCraftKey = item.isSimilar(CraftKey.getItem());
+        boolean isIntegratedKey = item.isSimilar(IntegratedKey.getItem()) && !player.isSneaking();
+        boolean isQuantumKey = item.isSimilar(QuantumKey.getItem()) && !player.isSneaking();
 
 
         if (!isCraftKey && !isIntegratedKey && !isQuantumKey) {

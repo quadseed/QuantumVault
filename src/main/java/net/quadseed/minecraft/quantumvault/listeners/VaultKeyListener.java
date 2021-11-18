@@ -57,9 +57,9 @@ public class VaultKeyListener implements Listener {
             return;
         }
 
-        boolean isVaultKey = item.equals(VaultKey.getItem());
-        boolean isIntegratedKey = item.equals(IntegratedKey.getItem()) && player.isSneaking();
-        boolean isQuantumKey = item.equals(QuantumKey.getItem()) && player.isSneaking();
+        boolean isVaultKey = item.isSimilar(VaultKey.getItem());
+        boolean isIntegratedKey = item.isSimilar(IntegratedKey.getItem()) && player.isSneaking();
+        boolean isQuantumKey = item.isSimilar(QuantumKey.getItem()) && player.isSneaking();
 
         if (!isVaultKey && !isIntegratedKey && !isQuantumKey) {
             return;
